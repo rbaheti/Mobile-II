@@ -17,7 +17,6 @@ import styles from './Styles';
 
 export default class SignUp extends React.Component {
   state = {
-    usernames: [],
     email: '',
     password: '',
     error: '',
@@ -34,24 +33,15 @@ export default class SignUp extends React.Component {
       });
   }
 
-  componentWillUnmount() {
-    console.log('is Un Mounted');
-    const usernames = this.state.usernames.slice();
-    AsyncStorage.setItem('usernames', JSON.stringify(usernames));
-  }
-
-  handleEmailChange = email => {
+  handleEmailChange = (email) => {
     this.setState({ email });
   };
 
-  handlePasswordChange = password => {
+  handlePasswordChange = (password) => {
     this.setState({ password });
   };
 
   createUser = () => {
-    console.log('user created');
-    console.log('email', this.state.email);
-    console.log('pw', this.state.password);
     const newUser = {
       email: this.state.email,
       password: this.state.password,
@@ -60,11 +50,10 @@ export default class SignUp extends React.Component {
       .post('https://mobile-server-ii.herokuapp.com/users', newUser)
       .then(res => {
         const token = res.data.token;
-        console.log(res.data.token);
         if (token) {
           AsyncStorage.setItem('token', token)
             .then(AsyncRes => {
-              // route to Todos
+              // route to Content page
               this.props.navigation.navigate('Content');
             })
             .catch(err => {
@@ -80,27 +69,21 @@ export default class SignUp extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <View>
-          <Text>Sign Up</Text>
-        </View>
+        <Text>Sign Up</Text>
         <Text style={styles.buttonText}>Email</Text>
         <TextInput
           style={styles.inputStyles}
-          onSubmitEditing={this.addTodo}
           onChangeText={this.handleEmailChange}
-          value={this.state.text}
           placeholder="Email"
         />
         <Text style={styles.buttonText}>Password</Text>
         <TextInput
           style={styles.inputStyles}
-          onSubmitEditing={this.addTodo}
           onChangeText={this.handlePasswordChange}
-          value={this.state.text}
           placeholder="Password"
         />
         <Button
-          onPress={() => this.createUser(this.state.email, this.state.password)}
+          onPress={() => this.createUser()}
           title="Sign Up"
         />
         <View style={styles.row}>

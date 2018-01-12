@@ -16,14 +16,14 @@ const axios = require('axios');
 
 export default class SignIn extends React.Component {
   state = {
-    usernames: [],
     email: '',
     password: '',
     error: '',
   };
 
+  // This componentDidMount method is just logging success or errors, if any
+  // and nothing fancy
   componentDidMount() {
-    console.log('is Mounted');
     const myToken = AsyncStorage.getItem('token')
       .then(response => {
         console.log('Token', response);
@@ -31,12 +31,6 @@ export default class SignIn extends React.Component {
       .catch(err => {
         console.log(err);
       });
-  }
-
-  componentWillUnmount() {
-    console.log('is Un Mounted');
-    const usernames = this.state.usernames.slice();
-    AsyncStorage.setItem('usernames', JSON.stringify(usernames));
   }
 
   handleEmailChange = email => {
@@ -47,23 +41,19 @@ export default class SignIn extends React.Component {
     this.setState({ password });
   };
 
-  createUser = () => {
-    console.log('user created');
-    console.log('email', this.state.email);
-    console.log('pw', this.state.password);
-    const newUser = {
+  signInUser = () => {
+    const existingUser = {
       email: this.state.email,
       password: this.state.password,
     };
     axios
-      .post('https://mobile-server-ii.herokuapp.com/signin', newUser)
+      .post('https://mobile-server-ii.herokuapp.com/signin', existingUser)
       .then(res => {
         const token = res.data.token;
-        console.log(res.data.token);
         if (token) {
           AsyncStorage.setItem('token', token)
             .then(AsyncRes => {
-              // route to Todos
+              // route to Content page
               this.props.navigation.navigate('Content');
             })
             .catch(err => {
@@ -79,34 +69,23 @@ export default class SignIn extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <View>
-          <Text>Sign In</Text>
-        </View>
+        <Text>Sign In</Text>
         <Text style={styles.buttonText}>Email</Text>
         <TextInput
           style={styles.inputStyles}
-          onSubmitEditing={this.addTodo}
           onChangeText={this.handleEmailChange}
-          value={this.state.text}
           placeholder="Email"
         />
         <Text style={styles.buttonText}>Password</Text>
         <TextInput
           style={styles.inputStyles}
-          onSubmitEditing={this.addTodo}
           onChangeText={this.handlePasswordChange}
-          value={this.state.text}
           placeholder="Password"
         />
         <Button
-          onPress={() => this.createUser(this.state.email, this.state.password)}
+          onPress={() => this.signInUser()}
           title="Sign In"
         />
-        <View style={styles.row}>
-          <Text style={styles.buttonText}>
-            Chuck Norris just cuzzz, foooo!!
-          </Text>
-        </View>
       </View>
     );
   }

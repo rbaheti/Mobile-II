@@ -30,7 +30,8 @@ const styles = StyleSheet.create({
   },
   header: {
     marginTop: 50,
-    fontSize: 20,
+    marginBottom: 50,
+    fontSize: 30,
   },
   container: {
     flex: 1,

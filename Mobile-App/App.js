@@ -5,6 +5,7 @@ import SignUp from './SignUp';
 import SignIn from './SignIn';
 import Content from './Content';
 import styles from './Styles';
+import TodoList from './TodoList';
 
 class Home extends Component {
   render() {
@@ -33,6 +34,7 @@ const Routes = StackNavigator({
   SignUp: { screen: SignUp },
   SignIn: { screen: SignIn },
   Content: { screen: Content },
+  TodoList: { screen: TodoList },
 });
 
 export default Routes;
